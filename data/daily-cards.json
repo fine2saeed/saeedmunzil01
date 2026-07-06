@@ -2,36 +2,66 @@
   {
     "date": "2026-06-30",
     "icon": "🕋",
-    "tag": "قرآنی نکتہ",
-    "title": "صبر اور نماز سے مدد طلب کرو",
-    "text": "سورۃ البقرہ میں اللہ تعالیٰ صبر اور نماز کو مشکلات میں مدد کا ذریعہ قرار دیتے ہیں۔"
+    "tag": { "ur": "قرآنی نکتہ", "en": "Qur'anic Insight" },
+    "title": {
+      "ur": "صبر اور نماز سے مدد طلب کرو",
+      "en": "Seek help through patience and prayer"
+    },
+    "text": {
+      "ur": "سورۃ البقرہ میں اللہ تعالیٰ صبر اور نماز کو مشکلات میں مدد کا ذریعہ قرار دیتے ہیں۔",
+      "en": "In Surah al-Baqarah, Allah presents patience and prayer as a source of strength in hardship."
+    }
   },
   {
     "date": "2026-06-29",
     "icon": "🔬",
-    "tag": "سائنس و ایمان",
-    "title": "جنین کی نشوونما کے مراحل",
-    "text": "قرآن میں بیان کردہ جنین کی تخلیق کے مراحل جدید ایمبریالوجی سے حیرت انگیز مطابقت رکھتے ہیں۔"
+    "tag": { "ur": "سائنس و ایمان", "en": "Science & Faith" },
+    "title": {
+      "ur": "جنین کی نشوونما کے مراحل",
+      "en": "The stages of embryonic growth"
+    },
+    "text": {
+      "ur": "قرآن میں بیان کردہ جنین کی تخلیق کے مراحل جدید ایمبریالوجی سے حیرت انگیز مطابقت رکھتے ہیں۔",
+      "en": "The stages of human creation described in the Qur'an invite thoughtful reflection alongside modern embryology."
+    }
   },
   {
     "date": "2026-06-28",
     "icon": "🕌",
-    "tag": "سیرت",
-    "title": "نبی کریم ﷺ کی عاجزی",
-    "text": "آپ ﷺ اپنے گھر کے کام خود کرتے، جوتے خود گانٹھتے اور خدمت گاروں سے نرمی سے پیش آتے۔"
+    "tag": { "ur": "سیرت", "en": "Prophetic Life" },
+    "title": {
+      "ur": "نبی کریم ﷺ کی عاجزی",
+      "en": "The humility of the Prophet ﷺ"
+    },
+    "text": {
+      "ur": "آپ ﷺ اپنے گھر کے کام خود کرتے، جوتے خود گانٹھتے اور خدمت گاروں سے نرمی سے پیش آتے۔",
+      "en": "He ﷺ did his own household chores, mended his own sandals, and treated servants with gentleness."
+    }
   },
   {
     "date": "2026-06-27",
     "icon": "✒️",
-    "tag": "اقبالیات",
-    "title": "خودی کا فلسفہ ایک سطر میں",
-    "text": "اقبال کے نزدیک خودی خود اعتمادی اور اپنی صلاحیتوں کو بروئے کار لانے کا نام ہے۔"
+    "tag": { "ur": "اقبالیات", "en": "Iqbal Studies" },
+    "title": {
+      "ur": "خودی کا فلسفہ ایک سطر میں",
+      "en": "The philosophy of Khudi in one line"
+    },
+    "text": {
+      "ur": "اقبال کے نزدیک خودی خود اعتمادی اور اپنی صلاحیتوں کو بروئے کار لانے کا نام ہے۔",
+      "en": "For Iqbal, Khudi (selfhood) means self-confidence and realising one's God-given potential."
+    }
   },
   {
     "date": "2026-06-26",
     "icon": "📖",
-    "tag": "فقہی نکتہ",
-    "title": "نیت کی اہمیت",
-    "text": "اعمال کا دار و مدار نیتوں پر ہے — یہ اصول انسان کی روزمرہ زندگی کے ہر فیصلے پر لاگو ہوتا ہے۔"
+    "tag": { "ur": "فقہی نکتہ", "en": "Jurisprudence" },
+    "title": {
+      "ur": "نیت کی اہمیت",
+      "en": "The weight of intention"
+    },
+    "text": {
+      "ur": "اعمال کا دار و مدار نیتوں پر ہے — یہ اصول انسان کی روزمرہ زندگی کے ہر فیصلے پر لاگو ہوتا ہے۔",
+      "en": "Deeds are judged by intention — a principle that applies to every decision in daily life."
+    }
   }
 ]

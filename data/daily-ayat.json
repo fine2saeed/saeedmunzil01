@@ -2,25 +2,49 @@
   {
     "date": "2026-07-01",
     "arabic": "وَقُل رَّبِّ زِدْنِي عِلْمًا",
-    "translation": "اور کہو: اے میرے رب! میرے علم میں اضافہ فرما۔",
-    "reference": "سورۃ طٰہٰ، آیت 114"
+    "translation": {
+      "ur": "اور کہو: اے میرے رب! میرے علم میں اضافہ فرما۔",
+      "en": "And say: My Lord, increase me in knowledge."
+    },
+    "reference": {
+      "ur": "سورۃ طٰہٰ، آیت 114",
+      "en": "Surah Ta-Ha, 20:114"
+    }
   },
   {
     "date": "",
     "arabic": "إِنَّمَا يَخْشَى اللَّهَ مِنْ عِبَادِهِ الْعُلَمَاءُ",
-    "translation": "اللہ کے بندوں میں سے صرف اہلِ علم ہی اس سے ڈرتے ہیں۔",
-    "reference": "سورۃ فاطر، آیت 28"
+    "translation": {
+      "ur": "اللہ کے بندوں میں سے صرف اہلِ علم ہی اس سے ڈرتے ہیں۔",
+      "en": "It is only those of His servants who have knowledge who truly stand in awe of Allah."
+    },
+    "reference": {
+      "ur": "سورۃ فاطر، آیت 28",
+      "en": "Surah Fatir, 35:28"
+    }
   },
   {
     "date": "",
-    "arabic": "وَقُل رَّبِّ زِدْنِي عِلْمًا",
-    "translation": "اے میرے رب! میرے علم میں اضافہ فرما۔",
-    "reference": "سورۃ طٰہٰ، آیت 114"
+    "arabic": "اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ",
+    "translation": {
+      "ur": "پڑھو اپنے رب کے نام سے جس نے پیدا کیا۔",
+      "en": "Read in the name of your Lord who created."
+    },
+    "reference": {
+      "ur": "سورۃ العلق، آیت 1",
+      "en": "Surah Al-Alaq, 96:1"
+    }
   },
   {
     "date": "",
     "arabic": "يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ",
-    "translation": "اللہ تم میں سے ایمان والوں اور علم والوں کے درجات بلند کرتا ہے۔",
-    "reference": "سورۃ المجادلہ، آیت 11"
+    "translation": {
+      "ur": "اللہ تم میں سے ایمان والوں اور علم والوں کے درجات بلند کرتا ہے۔",
+      "en": "Allah raises in rank those of you who believe, and those who are given knowledge."
+    },
+    "reference": {
+      "ur": "سورۃ المجادلہ، آیت 11",
+      "en": "Surah Al-Mujadila, 58:11"
+    }
   }
 ]
