@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleCard from './ArticleCard.astro';
+import NewsletterBox from './NewsletterBox.astro';
+import { articlesIn } from '../lib/articles';
+import { SITE, CATEGORIES, type Lang } from '../site';
+import { t, L, href, catLabel } from '../i18n';
+import ayat from '../data/daily-ayat.json';
+import hadith from '../data/daily-hadith.json';
+import cards from '../data/daily-cards.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const other: Lang = lang === 'ur' ? 'en' : 'ur';
+
+const posts = await articlesIn(lang);
+const featured = posts.find((p) => p.data.featured) || posts[0];
+const usedCats = CATEGORIES.filter((c) => posts.some((p) => p.data.category === c));
+
+// The page is built ahead of time, so we pick "today's" entry at build time
+// and let a tiny script swap in the real today's entry in the reader's browser.
+function dayOfYear(d = new Date()) {
+  const s = Date.UTC(d.getUTCFullYear(), 0, 0);
+  return Math.floor((d.valueOf() - s) / 86400000);
+}
+function pick<T extends { date?: string }>(list: T[]): T {
+  const iso = new Date().toISOString().slice(0, 10);
+  return list.find((i) => i.date === iso) || list[dayOfYear() % list.length];
+}
+const todayAyah = pick(ayat);
+const todayHadith = pick(hadith);
+
+const homeUrl = new URL(href(lang, '/'), SITE.url).href;
+const waText = (arabic: string, tr: string, src: string) =>
+  `https://wa.me/?text=${encodeURIComponent(`${arabic}\n\n${tr}\n— ${src}\n\n${homeUrl}`)}`;
+
+const scripture = {
+  ayah: ayat.map((a) => ({ date: a.date, arabic: a.arabic, tr: L(lang, a.translation), src: L(lang, a.reference) })),
+  hadith: hadith.map((h) => ({ date: h.date, arabic: h.arabic, tr: L(lang, h.translation), src: L(lang, h.source) })),
+  url: homeUrl,
+};
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: t(lang, 'brand'),
+    alternateName: t(other, 'brand'),
+    url: homeUrl,
+    inLanguage: lang,
+    description: t(lang, 'meta_desc'),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: t(lang, 'brand'),
+    url: SITE.url + '/',
+    logo: SITE.url + '/assets/logo.png',
+    email: SITE.email,
+    sameAs: Object.values(SITE.social).filter(Boolean),
+  },
+];
+---
+<Base lang={lang} title={t(lang, 'meta_title')} description={t(lang, 'meta_desc')} path={href(lang, '/')} altPath={href(other, '/')} jsonLd={jsonLd}>
+  <Fragment slot="top">
+    <section class="hero-editorial" id="home">
+      <div class="hero-container">
+        <div class="hero-grid">
+          <div class="hero-left">
+            <span class="hero-label">{t(lang, 'hero_label')}</span>
+            <h1 class="hero-title">
+              {t(lang, 'hero_title')} <br>
+              <span class="highlight">{t(lang, 'hero_highlight')}</span> {t(lang, 'hero_title2')}
+            </h1>
+            <p class="hero-subtitle">{t(lang, 'hero_sub')}</p>
+            <a href="#articles" class="btn-primary">{t(lang, 'hero_cta')}</a>
+          </div>
+          <blockquote class="hadith-card">
+            <p class="hadith-arabic" lang="ar">طَلَبُ الْعِلْمِ فَرِيضَةٌ<br>عَلَى كُلِّ مُسْلِمٍ</p>
+            <p class="hadith-translation">{t(lang, 'hero_hadith')}</p>
+            <footer class="hadith-source">{t(lang, 'hero_hadith_src')}</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="iqbal-section" aria-label={t(lang, 'iqbal_label')}>
+      <p class="iqbal-label">{t(lang, 'iqbal_label')}</p>
+      <p class="iqbal-sher">{t(lang, 'iqbal_1')}</p>
+      <p class="iqbal-sher">{t(lang, 'iqbal_2')}</p>
+      <p class="iqbal-author">{t(lang, 'iqbal_author')}</p>
+    </section>
+  </Fragment>
+
+  <section class="scripture-section" id="scripture">
+    <div class="main-content">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">{t(lang, 'scripture_eyebrow')}</p>
+          <h2>{t(lang, 'scripture_h2')}</h2>
+        </div>
+        <span class="line"></span>
+      </div>
+      <div class="scripture-grid">
+        <blockquote class="scripture-card" id="ayah">
+          <p class="scripture-kicker">{t(lang, 'ayat_kicker')}</p>
+          <p class="scripture-arabic" lang="ar" data-f="arabic">{todayAyah.arabic}</p>
+          <p class="scripture-translation" data-f="tr">{L(lang, todayAyah.translation)}</p>
+          <footer class="scripture-source" data-f="src">{L(lang, todayAyah.reference)}</footer>
+          <a class="scripture-share" data-f="wa" target="_blank" rel="noopener"
+             href={waText(todayAyah.arabic, L(lang, todayAyah.translation), L(lang, todayAyah.reference))}>↗ {t(lang, 'share_whatsapp')}</a>
+        </blockquote>
+        <blockquote class="scripture-card" id="hadith">
+          <p class="scripture-kicker">{t(lang, 'hadith_kicker')}</p>
+          <p class="scripture-arabic" lang="ar" data-f="arabic">{todayHadith.arabic}</p>
+          <p class="scripture-translation" data-f="tr">{L(lang, todayHadith.translation)}</p>
+          <footer class="scripture-source" data-f="src">{L(lang, todayHadith.source)}</footer>
+          <a class="scripture-share" data-f="wa" target="_blank" rel="noopener"
+             href={waText(todayHadith.arabic, L(lang, todayHadith.translation), L(lang, todayHadith.source))}>↗ {t(lang, 'share_whatsapp')}</a>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="daily-section" id="daily">
+    <div class="main-content">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">{t(lang, 'daily_eyebrow')}</p>
+          <h2>{t(lang, 'daily_h2')}</h2>
+        </div>
+        <span class="line"></span>
+      </div>
+      <div class="daily-grid">
+        {cards.map((c) => (
+          <article class="daily-card">
+            <div class="daily-card-top"><span class="daily-icon" aria-hidden="true">{c.icon || '📖'}</span></div>
+            <span class="tag-pill">{L(lang, c.tag)}</span>
+            <h3>{L(lang, c.title)}</h3>
+            <p>{L(lang, c.text)}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="main-content">
+    {featured && (
+      <>
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">{t(lang, 'featured_eyebrow')}</p>
+            <h2>{t(lang, 'featured_h2')}</h2>
+          </div>
+          <span class="line"></span>
+        </div>
+        <a class="featured-article" href={href(lang, `/articles/${featured.slug}/`)}>
+          <div class="featured-image" aria-hidden="true">{featured.data.hero}</div>
+          <div class="featured-content">
+            <span class="tag-pill">{catLabel(lang, featured.data.category)}</span>
+            <h3>{featured.data.title}</h3>
+            <p>{featured.data.description}</p>
+            <span class="btn-primary">{t(lang, 'featured_cta')}</span>
+          </div>
+        </a>
+      </>
+    )}
+
+    <div class="section-header" id="articles">
+      <div>
+        <p class="section-eyebrow">{t(lang, 'articles_eyebrow')}</p>
+        <h2>{t(lang, 'articles_h2')}</h2>
+      </div>
+      <span class="line"></span>
+    </div>
+
+    <nav class="filter-bar" aria-label={t(lang, 'footer_cats')}>
+      <a class="filter-btn active" href={href(lang, '/') + '#articles'} aria-current="page">{t(lang, 'filter_all')}</a>
+      {usedCats.map((c) => <a class="filter-btn" href={href(lang, `/category/${c}/`)}>{catLabel(lang, c)}</a>)}
+    </nav>
+
+    <div class="blog-grid-editorial">
+      {posts.length ? posts.map((a) => <ArticleCard article={a} />) : <p class="empty-msg">—</p>}
+    </div>
+  </div>
+
+  <section class="quote-editorial">
+    <blockquote class="quote-box">
+      <p class="quote-text">{t(lang, 'quote')}</p>
+      <footer class="quote-author">{t(lang, 'quote_author')}</footer>
+    </blockquote>
+  </section>
+
+  <NewsletterBox lang={lang} />
+
+  <script type="application/json" id="scripture-data" set:html={JSON.stringify(scripture)} />
+  <script>
+    // Swap in the reader's own "today" (the page itself was built earlier).
+    const data = JSON.parse(document.getElementById('scripture-data')!.textContent || '{}');
+    const now = new Date();
+    const iso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const doy = Math.floor((now.valueOf() - new Date(now.getFullYear(), 0, 0).valueOf()) / 86400000);
+    for (const key of ['ayah', 'hadith']) {
+      const list = data[key];
+      const card = document.getElementById(key);
+      if (!list?.length || !card) continue;
+      const e = list.find((i: any) => i.date === iso) || list[doy % list.length];
+      const set = (f: string, v: string) => { const el = card.querySelector(`[data-f="${f}"]`); if (el) el.textContent = v; };
+      set('arabic', e.arabic); set('tr', e.tr); set('src', e.src);
+      const wa = card.querySelector<HTMLAnchorElement>('[data-f="wa"]');
+      if (wa) wa.href = 'https://wa.me/?text=' + encodeURIComponent(`${e.arabic}\n\n${e.tr}\n— ${e.src}\n\n${data.url}`);
+    }
+  </script>
+</Base>

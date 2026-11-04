@@ -1,0 +1,25 @@
+---
+import { SITE, type Lang } from '../site';
+import { t } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const n = SITE.newsletter;
+---
+{n.action ? (
+  <section class="newsletter-editorial" aria-labelledby="newsletter-title">
+    <h2 id="newsletter-title">{t(lang, 'news_h3')}</h2>
+    <p>{t(lang, 'news_p')}</p>
+    <form class="newsletter-form" action={n.action} method="post" target="_blank">
+      <label for="newsletter-email" class="visually-hidden">{t(lang, 'news_label')}</label>
+      <input id="newsletter-email" type="email" name={n.emailField} placeholder={t(lang, 'news_ph')} autocomplete="email" required>
+      <button type="submit">{t(lang, 'news_btn')}</button>
+    </form>
+    <p class="form-note">{t(lang, 'news_note')}</p>
+  </section>
+) : (
+  <section class="newsletter-editorial" aria-labelledby="newsletter-title">
+    <h2 id="newsletter-title">{t(lang, 'contact_h3')}</h2>
+    <p>{t(lang, 'contact_p')}</p>
+    <a class="btn-primary contact-btn" href={`mailto:${SITE.email}`}>{t(lang, 'contact_btn')} — {SITE.email}</a>
+  </section>
+)}

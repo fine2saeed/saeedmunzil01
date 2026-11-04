@@ -1,0 +1,104 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleCard from './ArticleCard.astro';
+import ShareBar from './ShareBar.astro';
+import NewsletterBox from './NewsletterBox.astro';
+import { articlesIn, translationOf, type Article } from '../lib/articles';
+import { SITE } from '../site';
+import { t, href, fmtDate, catLabel } from '../i18n';
+
+interface Props { article: Article }
+const { article: a } = Astro.props;
+const lang = a.lang;
+const { Content } = await render(a);
+
+const path = href(lang, `/articles/${a.slug}/`);
+const url = new URL(path, SITE.url).href;
+const tr = await translationOf(a);
+const altPath = tr ? href(tr.lang, `/articles/${tr.slug}/`) : undefined;
+
+// Related: same category first, then the newest others.
+const others = (await articlesIn(lang)).filter((x) => x.slug !== a.slug);
+const related = [
+  ...others.filter((x) => x.data.category === a.data.category),
+  ...others.filter((x) => x.data.category !== a.data.category),
+].slice(0, 3);
+
+const catPath = href(lang, `/category/${a.data.category}/`);
+const published = a.data.date.toISOString();
+const modified = (a.data.updated ?? a.data.date).toISOString();
+const image = new URL(a.data.image || '/assets/og-cover.png', SITE.url).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: a.data.title,
+    description: a.data.description,
+    inLanguage: lang,
+    datePublished: published,
+    dateModified: modified,
+    image: [image],
+    articleSection: catLabel(lang, a.data.category),
+    author: { '@type': 'Person', name: SITE.author[lang], url: SITE.url + href(lang, '/about/') },
+    publisher: { '@type': 'Organization', name: t(lang, 'brand'), logo: { '@type': 'ImageObject', url: SITE.url + '/assets/logo.png' } },
+    mainEntityOfPage: url,
+    timeRequired: `PT${a.minutes}M`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t(lang, 'breadcrumb_home'), item: SITE.url + href(lang, '/') },
+      { '@type': 'ListItem', position: 2, name: catLabel(lang, a.data.category), item: SITE.url + catPath },
+      { '@type': 'ListItem', position: 3, name: a.data.title, item: url },
+    ],
+  },
+];
+---
+<Base lang={lang} title={`${a.data.title} | ${t(lang, 'brand')}`} description={a.data.description}
+      path={path} altPath={altPath} image={a.data.image} type="article" jsonLd={jsonLd}
+      publishedTime={published} modifiedTime={modified}>
+  <Fragment slot="top">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href={href(lang, '/')}>{t(lang, 'breadcrumb_home')}</a></li>
+            <li><a href={catPath}>{catLabel(lang, a.data.category)}</a></li>
+          </ol>
+        </nav>
+        <h1>{a.data.title}</h1>
+        <p class="lead">{a.data.description}</p>
+        <p class="article-meta" style="margin-top:1.2rem">
+          <span>✍️ {t(lang, 'by')} <a href={href(lang, '/about/')}>{SITE.author[lang]}</a></span>
+          <span>📅 <time datetime={published.slice(0, 10)}>{fmtDate(lang, a.data.date)}</time></span>
+          <span>⏱ {a.minutes} {t(lang, 'min')} {t(lang, 'read_time')}</span>
+        </p>
+      </div>
+    </div>
+  </Fragment>
+
+  <article class="article-wrap">
+    <div class="prose">
+      <Content />
+    </div>
+    <ShareBar lang={lang} url={url} title={a.data.title} />
+    <a class="back-link" href={href(lang, '/') + '#articles'}>{t(lang, 'all_articles')}</a>
+  </article>
+
+  {related.length > 0 && (
+    <section class="related" aria-labelledby="related-title">
+      <div class="section-header">
+        <h2 id="related-title">{t(lang, 'related')}</h2>
+        <span class="line"></span>
+      </div>
+      <div class="blog-grid-editorial">
+        {related.map((r) => <ArticleCard article={r} />)}
+      </div>
+    </section>
+  )}
+
+  <NewsletterBox lang={lang} />
+</Base>

@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import { t } from '../i18n';
+---
+<Base lang="ur" title={`${t('ur', 'notfound_title')} | ${t('ur', 'brand')}`} description={t('ur', 'notfound_p')} path="/404/" noindex>
+  <div class="notfound">
+    <h1>{t('ur', 'notfound_title')} — {t('en', 'notfound_title')}</h1>
+    <p>{t('ur', 'notfound_p')}<br>{t('en', 'notfound_p')}</p>
+    <a class="btn-primary" href="/">{t('ur', 'notfound_cta')}</a>
+    &nbsp;
+    <a class="btn-primary" href="/en/">{t('en', 'notfound_cta')}</a>
+  </div>
+</Base>

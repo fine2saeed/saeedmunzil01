@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, type Lang } from '../site';
+import { t, href, catLabel } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const other: Lang = lang === 'ur' ? 'en' : 'ur';
+const path = href(lang, '/about/');
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: t(lang, 'about_title'),
+  url: SITE.url + path,
+  inLanguage: lang,
+  about: { '@type': 'Organization', name: t(lang, 'brand'), url: SITE.url + '/', email: SITE.email },
+}];
+---
+<Base lang={lang} title={`${t(lang, 'about_title')} | ${t(lang, 'brand')}`} description={t(lang, 'about_desc')} path={path} altPath={href(other, '/about/')} jsonLd={jsonLd}>
+  <Fragment slot="top">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href={href(lang, '/')}>{t(lang, 'breadcrumb_home')}</a></li></ol></nav>
+        <h1>{t(lang, 'about_title')} — {t(lang, 'brand')}</h1>
+        <p class="lead">{t(lang, 'hero_sub')}</p>
+      </div>
+    </div>
+  </Fragment>
+
+  <div class="about-body prose">
+    {/* ✍️ SAEED: add your own story here — who you are, why you started
+        Saeed Munzil, and a photo. A real face and story builds trust. */}
+    {lang === 'ur' ? (
+      <>
+        <p>سعید منزل ایک علمی و ادبی پلیٹ فارم ہے۔ ہمارا مقصد نئی نسل کو دین و دنیا کا علم ادب، دیانت اور اعتدال کے ساتھ فراہم کرنا ہے — نہ اندھی تقلید، نہ بے جا مبالغہ۔</p>
+        <h2>یہاں آپ کیا پڑھیں گے</h2>
+        <ul>
+          <li><a href={href(lang, '/category/islamic/')}>{catLabel(lang, 'islamic')}</a> — قرآن، حدیث اور سیرت النبی ﷺ</li>
+          <li><a href={href(lang, '/category/philosophy/')}>{catLabel(lang, 'philosophy')}</a> — علامہ اقبال کی فکر اور اسلامی فلسفہ</li>
+          <li><a href={href(lang, '/category/modern/')}>{catLabel(lang, 'modern')}</a> — سائنس، ٹیکنالوجی اور ان پر اسلامی نقطہ نظر</li>
+          <li><a href={href(lang, '/category/history/')}>{catLabel(lang, 'history')}</a> — مسلم تہذیب اور علم کی تاریخ</li>
+        </ul>
+        <h2>حوالہ جات کا اصول</h2>
+        <p>ہر آیت کے ساتھ سورت اور آیت نمبر، اور ہر حدیث کے ساتھ کتاب اور حدیث نمبر درج کیا جاتا ہے تاکہ قارئین خود تصدیق کر سکیں۔ اگر آپ کو کسی حوالے میں غلطی نظر آئے تو براہ کرم ہمیں ضرور بتائیں۔</p>
+        <h2>رابطہ</h2>
+        <p>سوال، تجویز یا تصحیح کے لیے ای میل کریں: <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+      </>
+    ) : (
+      <>
+        <p>Saeed Munzil is a platform for knowledge and literature. Our aim is to give the next generation the knowledge of faith and world with adab, honesty and balance — neither blind imitation nor exaggeration.</p>
+        <h2>What you'll find here</h2>
+        <ul>
+          <li><a href={href(lang, '/category/islamic/')}>{catLabel(lang, 'islamic')}</a> — the Qur'an, Hadith and the life of the Prophet ﷺ</li>
+          <li><a href={href(lang, '/category/philosophy/')}>{catLabel(lang, 'philosophy')}</a> — Allama Iqbal's thought and Islamic philosophy</li>
+          <li><a href={href(lang, '/category/modern/')}>{catLabel(lang, 'modern')}</a> — science, technology and Islamic perspectives on them</li>
+          <li><a href={href(lang, '/category/history/')}>{catLabel(lang, 'history')}</a> — Muslim civilisation and the history of learning</li>
+        </ul>
+        <h2>Our citation standard</h2>
+        <p>Every verse is given with its surah and ayah number, and every hadith with its collection and number, so readers can check the source themselves. If you spot an error in a reference, please let us know.</p>
+        <h2>Contact</h2>
+        <p>For questions, suggestions or corrections, email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+      </>
+    )}
+  </div>
+</Base>
