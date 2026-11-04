@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleCard from './ArticleCard.astro';
+import { articlesIn } from '../lib/articles';
+import { SITE, CATEGORIES, type Lang, type Category } from '../site';
+import { t, href, catLabel } from '../i18n';
+
+interface Props { lang: Lang; category: Category }
+const { lang, category } = Astro.props;
+const other: Lang = lang === 'ur' ? 'en' : 'ur';
+const all = await articlesIn(lang);
+const posts = all.filter((p) => p.data.category === category);
+const usedCats = CATEGORIES.filter((c) => all.some((p) => p.data.category === c));
+const path = href(lang, `/category/${category}/`);
+const name = catLabel(lang, category);
+const title = `${name} | ${t(lang, 'brand')}`;
+const description = lang === 'ur'
+  ? `${name} پر سعید منزل کے مضامین — ${posts.map((p) => p.data.title).slice(0, 3).join('، ')}`
+  : `Saeed Munzil articles on ${name}: ${posts.map((p) => p.data.title).slice(0, 3).join('; ')}`;
+
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name,
+  inLanguage: lang,
+  url: SITE.url + path,
+  hasPart: posts.map((p) => ({ '@type': 'Article', headline: p.data.title, url: SITE.url + href(lang, `/articles/${p.slug}/`) })),
+}];
+---
+<Base lang={lang} title={title} description={description} path={path} altPath={href(other, `/category/${category}/`)} jsonLd={jsonLd} noindex={posts.length === 0}>
+  <Fragment slot="top">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <ol><li><a href={href(lang, '/')}>{t(lang, 'breadcrumb_home')}</a></li></ol>
+        </nav>
+        <h1>{name}</h1>
+        <p class="lead">{posts.length} {t(lang, 'category_count')}</p>
+      </div>
+    </div>
+  </Fragment>
+  <div class="main-content">
+    <nav class="filter-bar" aria-label={t(lang, 'footer_cats')}>
+      <a class="filter-btn" href={href(lang, '/') + '#articles'}>{t(lang, 'filter_all')}</a>
+      {usedCats.map((c) => (
+        <a class={`filter-btn${c === category ? ' active' : ''}`} href={href(lang, `/category/${c}/`)} aria-current={c === category ? 'page' : undefined}>{catLabel(lang, c)}</a>
+      ))}
+    </nav>
+    <div class="blog-grid-editorial">
+      {posts.length ? posts.map((a) => <ArticleCard article={a} />) : <p class="empty-msg">—</p>}
+    </div>
+  </div>
+</Base>

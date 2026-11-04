@@ -1,0 +1,18 @@
+---
+import type { Article } from '../lib/articles';
+import { t, href, fmtDate, catLabel } from '../i18n';
+import { SITE } from '../site';
+
+interface Props { article: Article }
+const { article: a } = Astro.props;
+const lang = a.lang;
+---
+<a class="blog-item" href={href(lang, `/articles/${a.slug}/`)} data-category={a.data.category}>
+  <p class="blog-date"><time datetime={a.data.date.toISOString().slice(0, 10)}>{fmtDate(lang, a.data.date)}</time> ✦ {catLabel(lang, a.data.category)}</p>
+  <h3>{a.data.title}</h3>
+  <p>{a.data.description}</p>
+  <div class="blog-meta">
+    <span>⏱ {a.minutes} {t(lang, 'min')} {t(lang, 'read_time')}</span>
+    <span>✍️ {SITE.author[lang]}</span>
+  </div>
+</a>

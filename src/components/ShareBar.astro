@@ -1,0 +1,29 @@
+---
+import type { Lang } from '../site';
+import { t } from '../i18n';
+
+interface Props { lang: Lang; url: string; title: string }
+const { lang, url, title } = Astro.props;
+const wa = `https://wa.me/?text=${encodeURIComponent(title + '\n' + url)}`;
+const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+const x = `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+---
+<div class="share-bar">
+  <span class="share-label">{t(lang, 'share')}:</span>
+  <a class="share-btn whatsapp" href={wa} target="_blank" rel="noopener">{t(lang, 'share_whatsapp')}</a>
+  <a class="share-btn" href={fb} target="_blank" rel="noopener">{t(lang, 'share_facebook')}</a>
+  <a class="share-btn" href={x} target="_blank" rel="noopener">{t(lang, 'share_x')}</a>
+  <button type="button" class="share-btn copy-link" data-url={url} data-done={t(lang, 'copied')}>{t(lang, 'copy_link')}</button>
+</div>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-link').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.url || location.href);
+        const old = b.textContent;
+        b.textContent = b.dataset.done || '✓';
+        setTimeout(() => (b.textContent = old), 2000);
+      } catch { /* clipboard blocked: do nothing */ }
+    });
+  });
+</script>
